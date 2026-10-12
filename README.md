@@ -2,7 +2,8 @@
 
 An immersive, cinematic web experience featuring interactive 3D character rendering, cursor-driven dual-scene reveal, scroll-triggered narrative exhibition, and creature dossiers.
 
-🌐 **Live Demo:** [https://rishukumark19.github.io/3d-animation-hero-section/](https://rishukumark19.github.io/3d-animation-hero-section/)
+🌐 **Live Demo:** [https://rishukumar.is-a.dev/3d-animation-hero-section/](https://rishukumar.is-a.dev/3d-animation-hero-section/)  
+*(Alternative mirror: [https://rishukumark19.github.io/3d-animation-hero-section/](https://rishukumark19.github.io/3d-animation-hero-section/))*
 
 ---
 

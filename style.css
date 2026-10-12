@@ -1,0 +1,3447 @@
+/* ==========================================================================
+   FLORIA — Minimal, Premium, Editorial Reference Layout (Pure Black #000000)
+   Exact Composition, Proportions, Spacing & Hierarchy from ClearPath reference
+   ========================================================================== */
+
+:root {
+  --bg-pure-black: #000000;
+  --text-white: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.65);
+  --text-dim: #737373;
+
+  /* Reference bottom right accent color (warm vibrant rust-orange from ClearPath) */
+  --accent-orange: #d3592c;
+  --accent-orange-hover: #e26738;
+  --accent-orange-glow: rgba(211, 89, 44, 0.35);
+
+  /* Typography */
+  --font-editorial: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-dominant: 'Syne', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-pure-black);
+  color: var(--text-white);
+  font-family: var(--font-editorial);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-pure-black);
+  color: var(--text-white);
+  font-family: var(--font-editorial);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   Ambient Atmosphere (Subtle Mysterious Micro-Details on Pure #000000)
+   -------------------------------------------------------------------------- */
+.ambient-cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 65%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  will-change: transform;
+}
+
+.star-dust-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.12;
+  background-image: 
+    radial-gradient(1px 1px at 30px 40px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 90px 140px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 170px 90px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 300px 250px, #ffffff, rgba(0,0,0,0));
+  background-size: 500px 500px;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Screen (Exact Viewport Geometry matching ClearPath)
+   -------------------------------------------------------------------------- */
+.hero-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 640px;
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Background & Spotlight Reveal Layers (bg-1 & bg-2)
+   -------------------------------------------------------------------------- */
+.hero-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Base image (bg-2: Nighttime Glowing Scene) */
+.hero-base-layer {
+  z-index: 2;
+}
+
+/* Reveal image (bg-1: Daytime Landscape Scene) */
+.hero-reveal-layer {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  will-change: mask-image, -webkit-mask-image, opacity;
+  /* Focused 150px radius circle of revealing with soft feathered glowing edge */
+  -webkit-mask-image: radial-gradient(
+    circle 150px at var(--spot-x, -9999px) var(--spot-y, -9999px),
+    #000000 0%,
+    #000000 65px,
+    rgba(0, 0, 0, 0.7) 105px,
+    rgba(0, 0, 0, 0.25) 132px,
+    rgba(0, 0, 0, 0) 150px
+  );
+  mask-image: radial-gradient(
+    circle 150px at var(--spot-x, -9999px) var(--spot-y, -9999px),
+    #000000 0%,
+    #000000 75px,
+    rgba(0, 0, 0, 0.75) 110px,
+    rgba(0, 0, 0, 0.25) 135px,
+    rgba(0, 0, 0, 0) 150px,
+    transparent 150px,
+    transparent 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: opacity 0.28s ease;
+}
+
+/* Soft glowing edge ring on the spotlight circle */
+.spotlight-glow-edge {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 150px at var(--spot-x, -9999px) var(--spot-y, -9999px),
+    transparent 0%,
+    transparent 115px,
+    rgba(255, 235, 170, 0.3) 138px,
+    rgba(255, 195, 80, 0.12) 147px,
+    transparent 154px
+  );
+  transition: opacity 0.28s ease;
+  will-change: background, opacity;
+}
+
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   3D Hero Character Canvas (Centered & Responsive, 70% Opacity)
+   -------------------------------------------------------------------------- */
+.hero-3d-canvas-container {
+  position: absolute;
+  top: 56%;
+  left: 52%;
+  transform: translate(-50%, -42%);
+  width: min(78vw, 720px);
+  height: min(80vh, 720px);
+  pointer-events: none;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  opacity: 0.95; /* High solid opacity, eliminating ghostliness while maintaining smooth blending */
+  transition: opacity 0.4s ease;
+}
+
+#hero3dCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   Top Navigation Bar (Enhanced Readability & Editorial Glass)
+   -------------------------------------------------------------------------- */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.2rem 4.8vw;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.28) 65%, transparent 100%);
+}
+
+.logo {
+  font-family: var(--font-editorial);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.48);
+  padding: 0.45rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.logo:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* In ClearPath reference, nav links are shifted right toward the CTA */
+.nav-center {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 3.5rem;
+  background: rgba(0, 0, 0, 0.42);
+  padding: 0.45rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.4);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.nav-link {
+  font-family: var(--font-editorial);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: -0.005em;
+  position: relative;
+  transition: color 0.22s ease, text-shadow 0.22s ease;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
+}
+
+.nav-link:hover {
+  color: var(--accent-orange-hover);
+  text-shadow: 0 2px 12px rgba(211, 89, 44, 0.6);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Pill CTA matching "Get in touch" in top-right of ClearPath */
+.nav-pill-btn {
+  font-family: var(--font-editorial);
+  font-size: 0.88rem;
+  font-weight: 500;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.45rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: transform 0.25s var(--ease-smooth), background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-pill-btn:hover {
+  background-color: #ededed;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
+}
+
+.nav-pill-btn .btn-arrow {
+  transition: transform 0.2s ease;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.nav-pill-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   Middle-Left Editorial Block (Enhanced Readability & Editorial Glass Card)
+   -------------------------------------------------------------------------- */
+.editorial-block {
+  position: absolute;
+  bottom: 12vh;
+  left: 4.8vw;
+  max-width: 420px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.editorial-description {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.9rem, 1vw, 1.02rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  max-width: 420px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 0.9rem 1.35rem;
+  border-radius: 14px;
+  border-left: 3px solid var(--accent-orange);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.65);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.dash-prefix {
+  color: var(--accent-orange);
+  font-weight: 400;
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Dominant Hero Typography: FLORIA (The Sole Grand Highlight of the Hero)
+   With reduced-size phrase "Enter a world where creatures come alive" on top
+   -------------------------------------------------------------------------- */
+.dominant-hero-element {
+  position: absolute;
+  top: calc(50% - 18%); /* Perfectly positioned below navbar, framing character and moon */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible; /* Prevents any clipping of letter ascenders or horizontal bounds */
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dominant-text-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 4vw;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.hero-eyebrow-phrase {
+  display: block;
+  font-family: var(--font-editorial);
+  font-size: clamp(0.72rem, 0.88vw, 0.84rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+  user-select: none;
+}
+
+.dominant-text {
+  font-family: var(--font-dominant);
+  font-size: clamp(4.5rem, 13.8vw, 16.5rem);
+  font-weight: 800;
+  line-height: 1; /* Complete vertical clearance */
+  padding: 0.1em 0; /* Ensures -webkit-background-clip does not clip glyph edges */
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+
+  /* Luminous silver gradient: ensures clear contrast and brilliance across dark night sky */
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0.42) 0%, 
+    rgba(255, 255, 255, 0.62) 25%, 
+    rgba(255, 255, 255, 0.82) 50%,
+    rgba(255, 255, 255, 0.95) 75%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: transform 0.35s var(--ease-smooth);
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Bottom Left Metadata / Coordinates (Enhanced Readability)
+   -------------------------------------------------------------------------- */
+.bottom-left-meta {
+  position: absolute;
+  bottom: 4.8vh;
+  left: 4.8vw;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+  user-select: none;
+}
+
+.meta-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-orange);
+  box-shadow: 0 0 8px var(--accent-orange);
+  animation: pulseMeta 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseMeta {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.meta-coords {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.meta-status {
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--accent-orange);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Bottom Right CTA Placement (Exact Reference Placement & Soft Radius)
+   -------------------------------------------------------------------------- */
+.bottom-cta-container {
+  position: absolute;
+  bottom: 4.8vh;
+  right: 4.8vw;
+  z-index: 30;
+}
+
+.cta-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cta-btn {
+  font-family: var(--font-editorial);
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-radius: 8px; /* Soft rounded rectangle matching ClearPath reference */
+  padding: 0.88rem 1.65rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  outline: none;
+  transition: all 0.25s var(--ease-smooth);
+}
+
+.cta-btn .btn-arrow {
+  transition: transform 0.22s var(--ease-smooth);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cta-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Primary CTA: "Explore Floria →" styled with vibrant warm accent from reference */
+.primary-btn {
+  background-color: var(--accent-orange);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(211, 89, 44, 0.25);
+}
+
+.primary-btn:hover {
+  background-color: var(--accent-orange-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(211, 89, 44, 0.42);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+
+/* Secondary CTA: "Meet the Creatures →" minimal dark glass with soft border */
+.secondary-btn {
+  background: rgba(18, 18, 18, 0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.secondary-btn:hover {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.secondary-btn:active {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   Audio Atmosphere Floating Control (Minimalist & Editorial)
+   -------------------------------------------------------------------------- */
+.audio-toggle-btn {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 10, 10, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.38rem 0.95rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  z-index: 40;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.audio-toggle-btn:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(20, 20, 20, 0.95);
+}
+
+.audio-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.audio-toggle-btn.is-active {
+  color: var(--accent-orange);
+  border-color: rgba(211, 89, 44, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Modals & Drawers (Editorial, Minimalist, Pure Dark)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-smooth);
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 860px;
+  background: #090909;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 2.8rem;
+  color: #ffffff;
+  transform: translateY(20px) scale(0.98);
+  transition: transform 0.35s var(--ease-smooth);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.is-open .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.4rem;
+}
+
+.modal-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-orange);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.modal-title {
+  font-family: var(--font-editorial);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.creature-dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.4rem;
+  margin-bottom: 2.2rem;
+}
+
+.creature-card {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 1.4rem;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.creature-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.creature-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.6rem;
+}
+
+.creature-name {
+  font-family: var(--font-editorial);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.65rem;
+  color: #ffffff;
+}
+
+.creature-desc {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 1.2rem;
+}
+
+.creature-stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.8rem;
+}
+
+.realm-card .realm-intro {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 2rem;
+}
+
+.territory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.2rem;
+}
+
+.territory-item {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1.2rem 1.6rem;
+}
+
+.territory-num {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--accent-orange);
+  font-weight: 600;
+  min-width: 28px;
+}
+
+.territory-item h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.territory-item p {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.territory-status {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.4rem;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints & Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .nav-center {
+    margin-right: 2rem;
+  }
+
+  .nav-links {
+    gap: 1.6rem;
+  }
+  
+  .editorial-headline {
+    font-size: 2.8rem;
+  }
+
+  .dominant-text {
+    font-size: 15vw;
+  }
+}
+
+@media (max-width: 860px) {
+  .navbar {
+    padding: 1.6rem 5vw;
+  }
+
+  .nav-center {
+    display: none;
+  }
+
+  .editorial-block {
+    top: auto;
+    bottom: 13vh;
+    left: 6vw;
+    right: 6vw;
+    max-width: none;
+  }
+
+  .editorial-description {
+    max-width: 100%;
+    font-size: 0.88rem;
+    padding: 0.75rem 1.1rem;
+  }
+
+  .hero-eyebrow-phrase {
+    font-size: clamp(0.62rem, 2.5vw, 0.75rem);
+    letter-spacing: 0.11em;
+    padding: 0.32rem 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .dominant-hero-element {
+    top: calc(50% - 18%);
+    bottom: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: visible;
+  }
+
+  .dominant-text {
+    font-size: clamp(4.5rem, 16vw, 7.5rem);
+    line-height: 1;
+    padding: 0.08em 0;
+  }
+
+  .bottom-left-meta {
+    display: none;
+  }
+
+  .bottom-cta-container {
+    bottom: 3.5vh;
+    left: 6vw;
+    right: 6vw;
+  }
+
+  .cta-actions-group {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .cta-btn {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .audio-toggle-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-actions-group {
+    flex-direction: column-reverse;
+    gap: 0.65rem;
+  }
+
+  .cta-btn {
+    width: 100%;
+  }
+
+  .editorial-block {
+    display: none;
+  }
+
+  .hero-eyebrow-phrase {
+    font-size: clamp(0.58rem, 2.8vw, 0.68rem);
+    letter-spacing: 0.1em;
+    padding: 0.28rem 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dominant-hero-element {
+    top: calc(50% - 18%);
+    bottom: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: visible;
+  }
+
+  .dominant-text {
+    font-size: clamp(3.2rem, 16vw, 5rem);
+    line-height: 1;
+    padding: 0.08em 0;
+  }
+}
+
+/* ==========================================================================
+   CINEMATIC SCROLL-DRIVEN EXHIBITION SECTION (Pure Black #000000)
+   Initial 9:16 Portrait Portal Expanding to 100vw x 100vh Full Screen
+   ========================================================================== */
+
+.exhibition-scroll-section {
+  position: relative;
+  width: 100%;
+  height: 380vh;
+  background-color: #000000;
+  z-index: 60;
+}
+
+.exhibition-sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ethereal Flowing Spores & Golden Threads Canvas (Valley of the Spun Hills) */
+.exhibition-flow-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.65;
+}
+
+/* --------------------------------------------------------------------------
+   Center 9:16 Scalable Portal Frame
+   -------------------------------------------------------------------------- */
+.exhibition-portal-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.portal-frame {
+  position: relative;
+  width: var(--portal-w, 290px);
+  height: var(--portal-h, 515px);
+  border-radius: var(--portal-radius, 22px);
+  overflow: hidden;
+  box-shadow: 
+    0 30px 100px rgba(0, 0, 0, 0.95), 
+    0 0 50px rgba(211, 89, 44, 0.16);
+  border: 1px solid rgba(255, 255, 255, var(--portal-border-op, 0.2));
+  will-change: width, height, border-radius, box-shadow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.portal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(var(--portal-img-scale, 1.05));
+  will-change: transform, filter;
+}
+
+.portal-edge-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+  opacity: var(--portal-border-op, 0.4);
+  transition: opacity 0.2s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Asymmetric Editorial "Organized Chaos" Text Annotations
+   -------------------------------------------------------------------------- */
+.exhibition-annotations-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.annotation-item {
+  position: absolute;
+  color: #ffffff;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: opacity 0.15s ease, filter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+.annotation-item.is-repelled,
+.annotation-item:hover {
+  filter: drop-shadow(0 10px 28px rgba(235, 150, 60, 0.35)) drop-shadow(0 0 10px rgba(255, 215, 120, 0.2));
+}
+
+/* Slot 1: Top-Left Primary Classification */
+.annot-top-left-primary {
+  top: 13vh;
+  left: 7.5vw;
+  max-width: 320px;
+  transform: rotate(-1.5deg);
+  transform-origin: top left;
+}
+
+.annot-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.annot-heading {
+  font-family: var(--font-editorial);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.annot-micro-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 0.5rem;
+}
+
+/* Slot 2: Mid-Left Poetic Excerpt */
+.annot-mid-left-quote {
+  top: 47vh;
+  left: 6.5vw;
+  max-width: 290px;
+  transform: rotate(-2.2deg);
+  transform-origin: center left;
+}
+
+.annot-quote {
+  font-family: var(--font-editorial);
+  font-size: 1.05rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.01em;
+}
+
+.annot-caption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.42);
+  margin-top: 0.55rem;
+  display: block;
+}
+
+/* Slot 3: Far-Left Monospace Specs */
+.annot-far-left-specs {
+  bottom: 12vh;
+  left: 7.5vw;
+  width: 280px;
+  transform: rotate(1deg);
+  transform-origin: bottom left;
+  background: rgba(14, 14, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.annot-far-left-specs.is-repelled,
+.annot-far-left-specs:hover {
+  border-color: rgba(235, 150, 60, 0.45);
+  box-shadow: 0 12px 32px rgba(235, 150, 60, 0.22);
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.spec-row:last-child {
+  border-bottom: none;
+}
+
+.spec-row span {
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.05em;
+}
+
+.spec-row strong {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Slot 4: Top-Right Tag & Badge */
+.annot-top-right-tag {
+  top: 13vh;
+  right: 7.5vw;
+  max-width: 320px;
+  text-align: right;
+  transform: rotate(2deg);
+  transform-origin: top right;
+}
+
+.annot-accent-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(211, 89, 44, 0.4);
+  background: rgba(211, 89, 44, 0.08);
+  color: var(--accent-orange);
+  margin-bottom: 0.65rem;
+}
+
+.annot-tagline {
+  font-family: var(--font-editorial);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Slot 5: Mid-Right Lore Snippet */
+.annot-mid-right-lore {
+  top: 45vh;
+  right: 6.8vw;
+  max-width: 300px;
+  text-align: right;
+  transform: rotate(1.8deg);
+  transform-origin: center right;
+}
+
+.annot-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.annot-subhead {
+  font-family: var(--font-editorial);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+.annot-body {
+  font-family: var(--font-editorial);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Slot 6: Bottom-Right Numerical Stat */
+.annot-bottom-right-stat {
+  bottom: 12vh;
+  right: 7.5vw;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transform: rotate(-1.2deg);
+  transform-origin: bottom right;
+}
+
+.stat-number {
+  font-family: var(--font-dominant);
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 0.85;
+  color: #ffffff;
+}
+
+.stat-desc {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.stat-title {
+  font-family: var(--font-editorial);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.stat-sub {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Slot 7: Bottom Center Status Badge */
+.annot-bottom-center-status {
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(14, 14, 14, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  backdrop-filter: blur(12px);
+}
+
+.status-pulse-ring {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  box-shadow: 0 0 10px var(--accent-orange);
+  animation: pulseMeta 2s infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll Progress Indicator & Final Immersive Title Overlay
+   -------------------------------------------------------------------------- */
+.exhibition-scroll-hint {
+  position: absolute;
+  top: 3.5vh;
+  right: 4.8vw;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.3s ease;
+}
+
+.hint-bar {
+  width: 60px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hint-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--accent-orange);
+  transition: width 0.1s ease;
+}
+
+.exhibition-final-caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  width: min(92vw, 840px);
+  will-change: transform, opacity;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-realm-tag {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  color: var(--accent-orange);
+  display: block;
+  margin-bottom: 0.75rem;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+}
+
+.final-realm-title {
+  font-family: var(--font-editorial);
+  font-size: clamp(2.4rem, 4.4vw, 4.2rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 0.9rem;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.98), 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.final-realm-sub {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.95rem, 1.2vw, 1.25rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.55;
+  max-width: 680px;
+  margin: 0 auto;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adaptations for Exhibition Section
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .annot-top-left-primary {
+    top: 9vh;
+    left: 4.5vw;
+    max-width: 250px;
+  }
+  .annot-top-right-tag {
+    top: 9vh;
+    right: 4.5vw;
+    max-width: 250px;
+  }
+  .annot-mid-left-quote {
+    top: 42vh;
+    left: 3.5vw;
+    max-width: 220px;
+  }
+  .annot-mid-right-lore {
+    top: 42vh;
+    right: 3.5vw;
+    max-width: 220px;
+  }
+  .annot-far-left-specs {
+    bottom: 9vh;
+    left: 4.5vw;
+    width: 230px;
+  }
+  .annot-bottom-right-stat {
+    bottom: 9vh;
+    right: 4.5vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .annot-mid-left-quote,
+  .annot-mid-right-lore {
+    display: none; /* Keep clean organized chaos on tablet/mobile */
+  }
+
+  .annot-top-left-primary {
+    top: 8vh;
+    left: 5vw;
+    max-width: 220px;
+  }
+
+  .annot-heading {
+    font-size: 1.25rem;
+  }
+
+  .annot-top-right-tag {
+    top: 8vh;
+    right: 5vw;
+    max-width: 200px;
+  }
+
+  .annot-far-left-specs {
+    bottom: 8vh;
+    left: 5vw;
+    width: 200px;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .annot-bottom-right-stat {
+    bottom: 8vh;
+    right: 5vw;
+  }
+
+  .stat-number {
+    font-size: 2.6rem;
+  }
+
+  .annot-bottom-center-status {
+    bottom: 3vh;
+    font-size: 0.64rem;
+    padding: 0.35rem 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .annot-far-left-specs {
+    display: none;
+  }
+
+  .annot-top-left-primary {
+    top: 6vh;
+    left: 5vw;
+    max-width: 170px;
+  }
+
+  .annot-top-right-tag {
+    top: 6vh;
+    right: 5vw;
+    max-width: 160px;
+  }
+
+  .annot-bottom-right-stat {
+    bottom: 7vh;
+    right: 5vw;
+  }
+
+  .annot-bottom-center-status {
+    bottom: 2vh;
+  }
+}
+
+/* ==========================================================================
+   FLORIA DISCOVERY ARCHIVE SECTION (Curated Scientific Field Journal)
+   Deep Black #000000, Editorial Asymmetric Grid, Ghost Typography & Micro-Specs
+   ========================================================================== */
+
+.discovery-archive-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 12rem 4.8vw 10rem 4.8vw;
+  overflow: hidden;
+  z-index: 70;
+}
+
+/* Ambient Deep Lighting Spots */
+.discovery-bg-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Ethereal Flowing Spores & Energy Stream Canvas */
+.discovery-flow-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+.discovery-glow-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.18;
+  will-change: transform;
+}
+
+.glow-spot-1 {
+  top: 15%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(211, 89, 44, 0.5) 0%, transparent 70%);
+}
+
+.glow-spot-2 {
+  top: 50%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(64, 180, 224, 0.35) 0%, transparent 70%);
+}
+
+.glow-spot-3 {
+  bottom: 10%;
+  left: 20%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(211, 89, 44, 0.3) 0%, transparent 70%);
+}
+
+/* Oversized Ghost Words (Curated Field Journal Parallax) */
+.oversized-ghost-word {
+  position: absolute;
+  font-family: var(--font-dominant);
+  font-size: clamp(6rem, 16vw, 15rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.022);
+  line-height: 0.85;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.ghost-word-1 {
+  top: 6%;
+  right: -4vw;
+  transform: rotate(-1.5deg);
+}
+
+.ghost-word-2 {
+  top: 42%;
+  left: -3vw;
+  transform: rotate(2deg);
+}
+
+.ghost-word-3 {
+  bottom: 8%;
+  right: 5vw;
+  transform: rotate(-1deg);
+}
+
+/* Field Guide Hairline Grid Lines */
+.journal-field-guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.field-guide-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.04) 15%, rgba(255, 255, 255, 0.04) 85%, transparent);
+}
+
+.line-left { left: 4.8vw; }
+.line-right { right: 4.8vw; }
+
+.discovery-inner-container {
+  position: relative;
+  max-width: 1540px;
+  margin: 0 auto;
+  z-index: 5;
+}
+
+/* --------------------------------------------------------------------------
+   Discovery Header
+   -------------------------------------------------------------------------- */
+.discovery-header {
+  margin-bottom: 7rem;
+}
+
+.discovery-header-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.journal-meta-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+}
+
+.journal-coord-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.tag-bracket {
+  color: var(--accent-orange);
+}
+
+.discovery-headline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: flex-end;
+}
+
+.discovery-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.45);
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.discovery-title {
+  font-family: var(--font-dominant);
+  font-size: clamp(2.8rem, 5.2vw, 5.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  color: #ffffff;
+}
+
+.discovery-lead-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.discovery-intro {
+  font-family: var(--font-editorial);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: -0.01em;
+}
+
+.discovery-index-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.index-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.7);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pill-num {
+  color: var(--accent-orange);
+}
+
+.pill-status {
+  border-color: rgba(211, 89, 44, 0.4);
+  background: rgba(211, 89, 44, 0.08);
+  color: var(--accent-orange);
+}
+
+.status-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  box-shadow: 0 0 8px var(--accent-orange);
+  animation: pulseMeta 2s infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Asymmetric Editorial Grid (Curated 5-Card Layout)
+   -------------------------------------------------------------------------- */
+.discovery-asymmetric-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2.8rem 2.2rem;
+  margin-bottom: 9rem;
+}
+
+/* Base Card Structure */
+.discovery-card {
+  position: relative;
+  will-change: transform, opacity;
+  opacity: 0;
+  transform: translateY(45px) scale(0.96);
+  transition: 
+    opacity 0.85s var(--ease-smooth),
+    transform 0.85s var(--ease-smooth),
+    box-shadow 0.45s ease;
+}
+
+.discovery-card.is-in-view {
+  opacity: 1;
+  transform: translate3d(var(--repel-x, 0px), var(--repel-y, 0px), 0px) scale(1) rotate(calc(var(--card-tilt, 0deg) + var(--repel-rot, 0deg)));
+  will-change: transform;
+}
+
+.card-inner {
+  position: relative;
+  background: rgba(14, 14, 14, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(14px);
+  transition: 
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.5s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.discovery-card:hover .card-inner {
+  transform: translateY(-8px) scale(1.015);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    0 35px 90px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(211, 89, 44, 0.18);
+}
+
+/* Card Media Wrapper */
+.card-media-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #050505;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  will-change: transform;
+}
+
+.discovery-card:hover .card-img {
+  transform: scale(1.07);
+  filter: brightness(1.06);
+}
+
+.card-media-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(14, 14, 14, 0.8) 85%, rgba(14, 14, 14, 1) 100%);
+  pointer-events: none;
+}
+
+.card-corner-spec {
+  position: absolute;
+  top: 1.1rem;
+  left: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.discovery-card:hover .card-corner-spec {
+  color: var(--accent-orange);
+  border-color: rgba(211, 89, 44, 0.5);
+}
+
+.card-domain-badge {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  background: rgba(211, 89, 44, 0.85);
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+  z-index: 2;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.card-hover-flare {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.discovery-card:hover .card-hover-flare {
+  opacity: 1;
+}
+
+/* Card Content / Typography */
+.card-info {
+  padding: 1.8rem 1.8rem 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-category-tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+}
+
+.card-status-pulse,
+.card-rarity-pill,
+.card-coords-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.card-rarity-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-name {
+  font-family: var(--font-editorial);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.discovery-card:hover .card-name {
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.card-desc {
+  font-family: var(--font-editorial);
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.card-micro-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.micro-spec {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.micro-spec strong {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Asymmetric Grid Geometry & Layout Roles
+   -------------------------------------------------------------------------- */
+
+/* Slot 1: Aether Weaver (Left Tall 3:4) */
+.card-slot-1 {
+  grid-column: 1 / 7;
+  --card-tilt: -1.2deg;
+}
+.card-slot-1 .card-media-wrapper {
+  aspect-ratio: 3 / 3.9;
+}
+
+/* Slot 2: Nocturne Obsidian Bloom (Right Wide 4:3, Staggered Down) */
+.card-slot-2 {
+  grid-column: 7 / 13;
+  margin-top: 4.5rem;
+  --card-tilt: 0.8deg;
+}
+.card-slot-2 .card-media-wrapper {
+  aspect-ratio: 4 / 2.9;
+}
+
+/* Slot 3: Valley of the Spun Hills (Panoramic Anchor, Centered Wide) */
+.card-slot-3 {
+  grid-column: 1 / 13;
+  margin-top: 3.5rem;
+  --card-tilt: 0deg;
+}
+.card-slot-3 .card-media-wrapper {
+  aspect-ratio: 16 / 7.5;
+}
+
+/* Slot 4: Moon-Horned Cervid (Tall Floating Left) */
+.card-slot-4 {
+  grid-column: 1 / 7;
+  margin-top: 2rem;
+  --card-tilt: -1.2deg;
+}
+.card-slot-4 .card-media-wrapper {
+  aspect-ratio: 3 / 3.9;
+}
+
+/* Slot 5: The Elder Cartographer (Offset Right Compact Anchor) */
+.card-slot-5 {
+  grid-column: 7 / 13;
+  margin-top: 5.5rem;
+  --card-tilt: 1.2deg;
+}
+.card-slot-5 .card-media-wrapper {
+  aspect-ratio: 4 / 3.2;
+}
+
+/* --------------------------------------------------------------------------
+   Strong Centered Discovery CTA
+   -------------------------------------------------------------------------- */
+.discovery-cta-section {
+  text-align: center;
+  padding: 5rem 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.6rem;
+}
+
+.ornament-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(211, 89, 44, 0.4));
+}
+
+.cta-ornament .ornament-line:last-child {
+  background: linear-gradient(90deg, rgba(211, 89, 44, 0.4), transparent);
+}
+
+.ornament-diamond {
+  color: var(--accent-orange);
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.cta-kicker-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--accent-orange);
+  margin-bottom: 0.8rem;
+}
+
+.cta-invitation-text {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 2.5rem;
+}
+
+.discovery-main-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: #0d0d0d;
+  color: #ffffff;
+  font-family: var(--font-editorial);
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 1.25rem 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(211, 89, 44, 0.6);
+  cursor: pointer;
+  overflow: visible;
+  transition: 
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(211, 89, 44, 0.25);
+}
+
+.discovery-main-cta-btn:hover {
+  background: var(--accent-orange);
+  border-color: var(--accent-orange-hover);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 20px 50px rgba(211, 89, 44, 0.4),
+    0 0 40px rgba(211, 89, 44, 0.5);
+}
+
+.cta-btn-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.discovery-main-cta-btn:hover .cta-btn-arrow {
+  transform: translateX(6px);
+}
+
+.btn-glow-aura {
+  position: absolute;
+  inset: -10px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(211, 89, 44, 0.4) 0%, transparent 70%);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: pulseMeta 2.5s infinite;
+}
+
+.cta-footnote {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   FLORIA EDITORIAL ART-BOOK FOOTER (Monumental Typography & Pure Black)
+   ========================================================================== */
+
+.floria-editorial-footer {
+  position: relative;
+  width: 100%;
+  background-color: #000000;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8rem 4.8vw 4.5rem 4.8vw;
+  color: #ffffff;
+  overflow-x: clip;
+  overflow-y: visible;
+  z-index: 80;
+}
+
+.footer-inner-container {
+  max-width: 1540px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Top Meta Row */
+.footer-top-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 5rem;
+}
+
+.footer-meta-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+}
+
+.footer-beacon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  box-shadow: 0 0 8px var(--accent-orange);
+  animation: pulseMeta 2.5s infinite;
+}
+
+.footer-coordinates {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Main Editorial 4-Column Grid */
+.footer-content-grid {
+  display: grid;
+  grid-template-columns: 2.2fr 1.3fr 1.3fr 1.6fr;
+  gap: 4rem 3rem;
+  margin-bottom: 8rem;
+}
+
+.footer-col-header {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+  margin-bottom: 1.8rem;
+}
+
+.footer-manifesto-text {
+  font-family: var(--font-editorial);
+  font-size: 1.12rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 2rem;
+  max-width: 480px;
+  letter-spacing: -0.01em;
+}
+
+.footer-colophon-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.footer-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.footer-nav-link {
+  font-family: var(--font-editorial);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-nav-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.nav-num {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-orange);
+}
+
+.footer-nav-action-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-editorial);
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-nav-action-btn:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+/* Social Tags */
+.footer-social-links-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.footer-social-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: 
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.footer-social-pill:hover {
+  background: rgba(211, 89, 44, 0.12);
+  border-color: rgba(211, 89, 44, 0.4);
+  color: var(--accent-orange);
+  transform: translateY(-2px);
+}
+
+.pill-arrow {
+  font-size: 0.78rem;
+}
+
+.footer-dispatch-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.dispatch-tag {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-orange);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.dispatch-desc {
+  font-family: var(--font-editorial);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+/* Monumental FLORIA Typography (Final Page of an Art Book - Fully visible & uncut) */
+.footer-monumental-wrap {
+  width: 100%;
+  text-align: center;
+  margin: 2rem 0 4.5rem 0;
+  padding: 1rem 2vw 2rem 2vw;
+  user-select: none;
+  overflow: visible;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-monumental-text {
+  font-family: var(--font-dominant);
+  font-size: clamp(3.5rem, 13vw, 14.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  padding: 0.12em 0.08em;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #ffffff 15%, rgba(255, 255, 255, 0.22) 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transform: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.footer-monumental-wrap:hover .footer-monumental-text {
+  transform: translateY(-4px) scale(1.015);
+  opacity: 0.95;
+}
+
+/* Bottom Bar */
+.footer-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-bottom-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.footer-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sep-bullet {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.back-to-summit-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.back-to-summit-btn:hover {
+  color: var(--accent-orange-hover);
+  transform: translateY(-2px);
+}
+
+.summit-arrow {
+  font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADAPTATIONS (Discovery Section & Footer)
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .discovery-asymmetric-grid {
+    gap: 2.2rem 1.8rem;
+  }
+
+  .card-slot-1 { grid-column: 1 / 7; }
+  .card-slot-2 { grid-column: 7 / 13; margin-top: 3rem; }
+  .card-slot-3 { grid-column: 1 / 13; margin-top: 2rem; }
+  .card-slot-4 { grid-column: 7 / 13; margin-top: 2rem; }
+  .card-slot-5 { grid-column: 1 / 7; margin-top: 0; }
+
+  .footer-content-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .discovery-headline-row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .discovery-asymmetric-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .card-slot-1,
+  .card-slot-2,
+  .card-slot-3,
+  .card-slot-4,
+  .card-slot-5 {
+    grid-column: 1 / -1;
+    margin-top: 0 !important;
+    --card-tilt: 0deg !important;
+  }
+
+  .card-slot-1 .card-media-wrapper,
+  .card-slot-4 .card-media-wrapper {
+    aspect-ratio: 4 / 3.2;
+  }
+
+  .card-slot-3 .card-media-wrapper {
+    aspect-ratio: 16 / 9;
+  }
+
+  .footer-content-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .footer-top-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .discovery-archive-section {
+    padding: 7rem 5vw 6rem 5vw;
+  }
+
+  .floria-editorial-footer {
+    padding: 6rem 5vw 3.5rem 5vw;
+  }
+
+  .card-info {
+    padding: 1.4rem;
+  }
+
+  .card-name {
+    font-size: 1.35rem;
+  }
+
+  .discovery-main-cta-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1.1rem 2rem;
+  }
+}
+
+/* ==========================================================================
+   FLORIA v20 ENHANCEMENTS — All 25 Improvements
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LOADING SCREEN
+   -------------------------------------------------------------------------- */
+.floria-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.floria-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.loader-logo {
+  font-family: var(--font-dominant);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  background: linear-gradient(90deg, #262626 0%, #666 40%, #ececec 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: loaderPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.loader-bar-wrap {
+  width: 220px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loader-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-orange), #f5a623);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(211,89,44,0.8);
+}
+
+.loader-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   2. SCROLL PROGRESS BAR
+   -------------------------------------------------------------------------- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-orange) 0%, #f5a623 60%, #fff8e7 100%);
+  z-index: 9000;
+  box-shadow: 0 0 10px rgba(211,89,44,0.7);
+  transition: width 0.05s linear;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. CUSTOM CURSOR
+   -------------------------------------------------------------------------- */
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"] { cursor: none; }
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform;
+}
+
+.cursor-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-orange);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(211,89,44,0.9);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+
+.cursor-ring {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(211,89,44,0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+}
+
+.custom-cursor.is-hovering .cursor-dot {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+}
+
+.custom-cursor.is-hovering .cursor-ring {
+  width: 52px;
+  height: 52px;
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* --------------------------------------------------------------------------
+   4. BACK TO TOP BUTTON
+   -------------------------------------------------------------------------- */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(10,10,10,0.85);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all 0.35s var(--ease-smooth);
+}
+
+.back-to-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+  color: #fff;
+  border-color: rgba(211,89,44,0.5);
+  box-shadow: 0 0 20px rgba(211,89,44,0.2);
+  transform: translateY(-3px);
+}
+
+.back-to-top-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   5. AMBIENT PARTICLES CANVAS
+   -------------------------------------------------------------------------- */
+.particles-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+}
+
+/* --------------------------------------------------------------------------
+   6. MOBILE NAV HAMBURGER & DRAWER
+   -------------------------------------------------------------------------- */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-left: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.mobile-menu-btn.is-open span:nth-child(1) {
+  transform: rotate(45deg) translate(4.5px, 4.5px);
+}
+.mobile-menu-btn.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-menu-btn.is-open span:nth-child(3) {
+  transform: rotate(-45deg) translate(4.5px, -4.5px);
+}
+
+.mobile-nav-drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(6,6,6,0.96);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 2rem 6vw 2.5rem;
+  z-index: 45;
+  transform: translateY(-20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s var(--ease-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mobile-nav-drawer.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-editorial);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: block;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  color: var(--accent-orange);
+  padding-left: 0.5rem;
+}
+
+.mobile-nav-cta {
+  align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+  .nav-center { display: none; }
+  .mobile-menu-btn { display: flex; }
+}
+
+/* --------------------------------------------------------------------------
+   7. SCROLL DOWN INDICATOR
+   -------------------------------------------------------------------------- */
+.scroll-down-indicator {
+  position: absolute;
+  bottom: 4.8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  pointer-events: none;
+  animation: scrollFade 3s ease-in-out infinite;
+}
+
+@keyframes scrollFade {
+  0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 0.9; transform: translateX(-50%) translateY(6px); }
+}
+
+.scroll-down-indicator.is-hidden {
+  opacity: 0 !important;
+  transition: opacity 0.4s ease;
+}
+
+.scroll-indicator-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--accent-orange), transparent);
+  border-radius: 1px;
+}
+
+.scroll-indicator-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   8. LANDSCAPE HOTSPOTS
+   -------------------------------------------------------------------------- */
+.landscape-hotspot {
+  position: absolute;
+  z-index: 10;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.hotspot-ping {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(211,89,44,0.9);
+  box-shadow: 0 0 0 0 rgba(211,89,44,0.5);
+  animation: hotspotPulse 2.2s ease-out infinite;
+  position: relative;
+}
+
+@keyframes hotspotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(211,89,44,0.6); }
+  70% { box-shadow: 0 0 0 18px rgba(211,89,44,0); }
+  100% { box-shadow: 0 0 0 0 rgba(211,89,44,0); }
+}
+
+.hotspot-tooltip {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: rgba(5,5,5,0.94);
+  border: 1px solid rgba(211,89,44,0.35);
+  border-radius: 10px;
+  padding: 0.75rem 1.1rem;
+  width: 180px;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s var(--ease-smooth);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  white-space: normal;
+}
+
+.hotspot-tooltip strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--accent-orange);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.hotspot-tooltip p {
+  font-family: var(--font-editorial);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+.landscape-hotspot:hover .hotspot-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   9. CARD FILTER TABS
+   -------------------------------------------------------------------------- */
+.card-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  width: fit-content;
+}
+
+.filter-tab {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-smooth);
+}
+
+.filter-tab:hover {
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+}
+
+.filter-tab.is-active {
+  background: var(--accent-orange);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(211,89,44,0.35);
+}
+
+/* Cards hidden by filter */
+.discovery-card.is-filtered-out {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   10. RARITY BADGE COLORS
+   -------------------------------------------------------------------------- */
+.card-corner-spec.rarity-legendary {
+  background: linear-gradient(135deg, rgba(255,200,50,0.25), rgba(255,170,0,0.12));
+  border-color: rgba(255,195,50,0.5);
+  color: #ffd44d;
+  text-shadow: 0 0 12px rgba(255,200,50,0.7);
+  box-shadow: 0 0 18px rgba(255,185,0,0.2);
+}
+
+.card-corner-spec.rarity-rare {
+  background: linear-gradient(135deg, rgba(100,160,255,0.22), rgba(60,120,255,0.1));
+  border-color: rgba(100,160,255,0.45);
+  color: #80b3ff;
+  text-shadow: 0 0 10px rgba(80,130,255,0.6);
+}
+
+.card-corner-spec.rarity-celestial {
+  background: linear-gradient(135deg, rgba(190,120,255,0.22), rgba(140,60,255,0.1));
+  border-color: rgba(190,120,255,0.45);
+  color: #d0a0ff;
+  text-shadow: 0 0 10px rgba(170,100,255,0.6);
+}
+
+.card-corner-spec.rarity-keeper {
+  background: linear-gradient(135deg, rgba(211,89,44,0.22), rgba(180,60,20,0.1));
+  border-color: rgba(211,89,44,0.5);
+  color: var(--accent-orange);
+  text-shadow: 0 0 10px rgba(211,89,44,0.6);
+}
+
+/* --------------------------------------------------------------------------
+   11. CARD DOSSIER BUTTON
+   -------------------------------------------------------------------------- */
+.card-dossier-btn {
+  display: block;
+  width: calc(100% - 2.8rem);
+  margin: 0 1.4rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.discovery-card:hover .card-dossier-btn {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--accent-orange);
+  border-color: rgba(211,89,44,0.3);
+  background: rgba(211,89,44,0.06);
+}
+
+/* --------------------------------------------------------------------------
+   12. DOSSIER FULLSCREEN OVERLAY MODAL
+   -------------------------------------------------------------------------- */
+.dossier-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s var(--ease-smooth);
+}
+
+.dossier-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dossier-panel {
+  position: relative;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.4s var(--ease-smooth);
+}
+
+.dossier-overlay.is-open .dossier-panel {
+  transform: scale(1) translateY(0);
+}
+
+.dossier-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.dossier-close:hover {
+  background: rgba(211,89,44,0.2);
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+}
+
+.dossier-content {
+  padding: 3rem;
+}
+
+.dossier-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.dossier-img {
+  width: 160px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.dossier-meta .dossier-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.dossier-meta h2 {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.dossier-meta p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
+  max-width: 500px;
+}
+
+.dossier-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dossier-stat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.dossier-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.38);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.dossier-stat-value {
+  font-family: var(--font-editorial);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dossier-lore {
+  background: rgba(211,89,44,0.06);
+  border-left: 3px solid var(--accent-orange);
+  border-radius: 0 10px 10px 0;
+  padding: 1.5rem;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   13. CTA BUTTON — RIPPLE RING ON CLICK
+   -------------------------------------------------------------------------- */
+.btn-ripple-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid var(--accent-orange);
+  opacity: 0;
+  transform: scale(1);
+  pointer-events: none;
+}
+
+.discovery-main-cta-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.discovery-main-cta-btn.is-rippling .btn-ripple-ring {
+  animation: rippleExpand 0.7s var(--ease-smooth) forwards;
+}
+
+@keyframes rippleExpand {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+
+/* --------------------------------------------------------------------------
+   14. AUDIO TOGGLE — PULSE RING
+   -------------------------------------------------------------------------- */
+.audio-toggle-btn {
+  position: relative;
+}
+
+.audio-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(211,89,44,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.audio-toggle-btn.is-active .audio-pulse-ring {
+  opacity: 1;
+  animation: audioPulseRing 2s ease-in-out infinite;
+}
+
+@keyframes audioPulseRing {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   15. NEWSLETTER INPUT
+   -------------------------------------------------------------------------- */
+.footer-newsletter {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 1rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  transition: border-color 0.25s ease;
+}
+
+.footer-newsletter:focus-within {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 18px rgba(211,89,44,0.2);
+}
+
+.newsletter-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1rem;
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255,255,255,0.28);
+}
+
+.newsletter-btn {
+  background: var(--accent-orange);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.newsletter-btn:hover {
+  background: var(--accent-orange-hover);
+}
+
+.newsletter-confirm {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-orange);
+  margin-top: 0.6rem;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s ease, height 0.4s ease;
+}
+
+.newsletter-confirm.is-visible {
+  opacity: 1;
+  height: 1.2em;
+}
+
+/* --------------------------------------------------------------------------
+   16. STAT COUNTER — COUNT-UP ANIMATION
+   -------------------------------------------------------------------------- */
+.spec-row strong[data-countup] {
+  display: inline-block;
+}
+
+/* --------------------------------------------------------------------------
+   17. SECTION TRANSITIONS — Dissolve dividers between sections
+   -------------------------------------------------------------------------- */
+.exhibition-scroll-section::before {
+  content: '';
+  display: block;
+  height: 120px;
+  background: linear-gradient(to bottom, #000 0%, transparent 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.discovery-archive-section::before {
+  content: '';
+  display: block;
+  height: 100px;
+  background: linear-gradient(to bottom, #000 0%, transparent 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   18. CARD STAGGER ENTRANCE — slide up + fade
+   -------------------------------------------------------------------------- */
+.discovery-card {
+  transition: opacity 0.55s ease, transform 0.55s var(--ease-smooth);
+}
+
+.discovery-card:not(.is-in-view) {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.discovery-card.is-in-view {
+  opacity: 1;
+  transform: translate3d(var(--repel-x, 0px), var(--repel-y, 0px), 0px) scale(1) rotate(calc(var(--card-tilt, 0deg) + var(--repel-rot, 0deg)));
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   19. PORTAL PARALLAX HINT — CSS variable driven (JS sets --scroll-y)
+   -------------------------------------------------------------------------- */
+.portal-image {
+  transition: transform 0.1s linear;
+}
+
+/* --------------------------------------------------------------------------
+   20. FOOTER ENHANCEMENT — Newsletter label & colophon
+   -------------------------------------------------------------------------- */
+.footer-bottom-bar {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* --------------------------------------------------------------------------
+   21. SECTION GLOWING AMBER DIVIDER
+   -------------------------------------------------------------------------- */
+.discovery-archive-section .discovery-inner-container::before {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-orange), transparent);
+  margin: 0 auto 4rem;
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   22. PORTAL FRAME HOVER — glow border
+   -------------------------------------------------------------------------- */
+.portal-frame {
+  transition: box-shadow 0.4s ease;
+}
+
+.portal-frame:hover {
+  box-shadow: 0 0 60px rgba(211,89,44,0.2), 0 30px 100px rgba(0,0,0,0.95);
+}
+
+/* --------------------------------------------------------------------------
+   23. NAV PILL SHIMMER ON HOVER
+   -------------------------------------------------------------------------- */
+.nav-pill-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-pill-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.45s ease;
+}
+
+.nav-pill-btn:hover::after {
+  left: 160%;
+}
+
+/* --------------------------------------------------------------------------
+   24. HERO PARALLAX DRIFT ON DOMINANT TEXT — enhanced
+   -------------------------------------------------------------------------- */
+.dominant-text {
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   25. MOBILE RESPONSIVE ADJUSTMENTS for new elements
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .scroll-down-indicator { display: none; }
+  .back-to-top-btn { bottom: 1.25rem; right: 1.25rem; }
+  .card-filter-tabs { border-radius: 14px; width: auto; }
+  .dossier-header { flex-direction: column; }
+  .dossier-img { width: 100%; height: 220px; }
+  .dossier-content { padding: 2rem 1.5rem; }
+}
+

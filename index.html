@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLORIA — Enter a World Where Creatures Come Alive</title>
+  <meta name="description" content="An immersive world of curious creatures, magical places, and stories waiting to be discovered.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=34">
+</head>
+<body>
+
+  <!-- ========== LOADING SCREEN ========== -->
+  <div class="floria-loader" id="floriaLoader">
+    <div class="loader-inner">
+      <div class="loader-logo">FLORIA</div>
+      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+      <div class="loader-label" id="loaderLabel">INITIALISING CODEX...</div>
+    </div>
+  </div>
+
+  <!-- ========== SCROLL PROGRESS BAR ========== -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- ========== CUSTOM CURSOR ========== -->
+  <div class="custom-cursor" id="customCursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+  </div>
+
+  <!-- ========== BACK TO TOP ========== -->
+  <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    <span>TOP</span>
+  </button>
+
+  <!-- ========== AMBIENT PARTICLES ========== -->
+  <canvas class="particles-canvas" id="particlesCanvas"></canvas>
+
+  <!-- Background Canvas for Subtle Mysterious Atmosphere (Pure #000000 base) -->
+  <div class="ambient-cursor-glow" id="cursorGlow"></div>
+  <div class="star-dust-layer" id="dustLayer"></div>
+
+  <!-- Main Hero Viewport Container (Fixed 100vh Layout Reference) -->
+  <main class="hero-screen" id="heroScreen">
+    
+    <!-- Base Image Layer (bg-2: Nighttime Glowing Scene) -->
+    <div class="hero-layer hero-base-layer" id="heroBaseLayer" aria-hidden="true">
+      <img src="materials/bg-2.png" alt="Floria Night Scene" class="hero-bg-img" id="heroBaseImg">
+    </div>
+
+    <!-- Cursor-Following Reveal Layer (bg-1: Daytime Landscape Scene) -->
+    <div class="hero-layer hero-reveal-layer" id="heroRevealLayer" aria-hidden="true">
+      <img src="materials/bg-1.png" alt="Floria Day Reveal Scene" class="hero-bg-img" id="heroRevealImg">
+    </div>
+
+    <!-- Soft Feathered/Glowing Edge Ring for the Spotlight -->
+    <div class="hero-layer spotlight-glow-edge" id="spotlightGlowEdge" aria-hidden="true"></div>
+
+    <!-- 3D Hero Character (Interactive Cursor-Following Model) -->
+    <div class="hero-3d-canvas-container" id="hero3dContainer" aria-hidden="true">
+      <canvas id="hero3dCanvas"></canvas>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar" id="navbar">
+      <div class="nav-left">
+        <a href="#heroScreen" class="logo" id="brandLogo">FLORIA</a>
+      </div>
+
+      <nav class="nav-center" aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#sanctuaries" class="nav-link" id="navSanctuaries">Sanctuaries</a></li>
+          <li><a href="#creatures" class="nav-link" id="navCreatures">Creatures</a></li>
+          <li><a href="#lore" class="nav-link" id="navLore">Lore</a></li>
+          <li><a href="#expeditions" class="nav-link" id="navExpeditions">Expeditions</a></li>
+          <li><a href="#archive" class="nav-link" id="navArchive">Archive</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <button class="nav-pill-btn" id="navCtaBtn" aria-label="Explore Floria">
+          <span>Explore Floria</span>
+          <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+        <!-- Mobile hamburger -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <ul class="mobile-nav-links">
+        <li><a href="#sanctuaries" class="mobile-nav-link">Sanctuaries</a></li>
+        <li><a href="#creatures" class="mobile-nav-link">Creatures</a></li>
+        <li><a href="#lore" class="mobile-nav-link">Lore</a></li>
+        <li><a href="#expeditions" class="mobile-nav-link">Expeditions</a></li>
+        <li><a href="#archive" class="mobile-nav-link">Archive</a></li>
+      </ul>
+      <button class="cta-btn primary-btn mobile-nav-cta" id="mobileNavCta">Explore Floria &rarr;</button>
+    </div>
+
+    <!-- Dominant Hero Typography Element: Pure Minimal Cinematic Text -->
+    <div class="dominant-hero-element" aria-hidden="true">
+      <div class="dominant-text-wrap" id="dominantText">
+        <p class="hero-eyebrow-phrase" id="heroHeadline">
+          Enter a world where creatures come alive
+        </p>
+        <h1 class="dominant-text">FLORIA</h1>
+      </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-down-indicator" id="scrollDownIndicator" aria-hidden="true">
+      <div class="scroll-indicator-line"></div>
+      <span class="scroll-indicator-label">SCROLL</span>
+    </div>
+
+  </main>
+
+  <!-- Cinematic Scroll-Driven Storytelling Section (Exhibition Discovery) -->
+  <section class="exhibition-scroll-section" id="exhibitionSection" aria-label="Sanctuary Discovery Exhibition">
+    <div class="exhibition-sticky-stage" id="exhibitionStickyStage">
+      
+      <!-- Subtle Flowing Spores & Ethereal Thread Canvas in Background -->
+      <canvas class="exhibition-flow-canvas" id="exhibitionFlowCanvas" aria-hidden="true"></canvas>
+
+      <!-- Asymmetric Editorial 'Organized Chaos' Text Annotations -->
+      <div class="exhibition-annotations-layer" id="annotationsLayer">
+        
+        <!-- Text Item 1: Top-Left Header / Classification -->
+        <article class="annotation-item annot-top-left-primary" data-slot="1">
+          <span class="annot-badge">SANCTUARY ARCHIVE // 02</span>
+          <h3 class="annot-heading">Valley of the Spun Hills</h3>
+          <p class="annot-micro-text">ELEVATION: 1,420M &bull; SECTOR 04-G</p>
+        </article>
+
+        <!-- Text Item 2: Mid-Left Poetic Excerpt -->
+        <article class="annotation-item annot-mid-left-quote" data-slot="2">
+          <p class="annot-quote">&ldquo;Woven from dormant threads of golden twilight &amp; living hillside fleece.&rdquo;</p>
+          <span class="annot-caption">&mdash; Floria Expeditions Log, Vol. IX</span>
+        </article>
+
+        <!-- Text Item 3: Far-Left Monospace Specs -->
+        <article class="annotation-item annot-far-left-specs" data-slot="3">
+          <div class="spec-row"><span>ATMOSPHERE</span><strong>Perpetual Autumnal Bloom</strong></div>
+          <div class="spec-row"><span>POPULATION</span><strong>42 Master Weavers</strong></div>
+          <div class="spec-row"><span>HARMONIC</span><strong>528 Hz Solfeggio</strong></div>
+        </article>
+
+        <!-- Text Item 4: Top-Right Tag & Badge -->
+        <article class="annotation-item annot-top-right-tag" data-slot="4">
+          <span class="annot-accent-pill">DISCOVERY ACTIVE &bull; UNLOCKED</span>
+          <p class="annot-tagline">Where each cobblestone staircase is hand-stitched into the living earth.</p>
+        </article>
+
+        <!-- Text Item 5: Mid-Right Lore Snippet -->
+        <article class="annotation-item annot-mid-right-lore" data-slot="5">
+          <span class="annot-label">HABITAT PHENOMENON</span>
+          <h4 class="annot-subhead">Chimneys of Wild Cinnamon</h4>
+          <p class="annot-body">Gently exhaling warm spice plumes across the knit pastures at dusk.</p>
+        </article>
+
+        <!-- Text Item 6: Bottom-Right Numerical Index -->
+        <article class="annotation-item annot-bottom-right-stat" data-slot="6">
+          <div class="stat-number">09</div>
+          <div class="stat-desc">
+            <span class="stat-title">SACRED DOMAINS</span>
+            <span class="stat-sub">CATALOGUED IN REALM 01</span>
+          </div>
+        </article>
+
+        <!-- Text Item 7: Bottom Center Exhibition Badge -->
+        <article class="annotation-item annot-bottom-center-status" data-slot="7">
+          <div class="status-pulse-ring"></div>
+          <span class="status-label">SANCTUARY EXHIBIT 02 // SCROLL TO EXPAND REALM</span>
+        </article>
+
+      </div>
+
+      <!-- Center Scalable 9:16 Portal Frame -->
+      <div class="exhibition-portal-wrapper" id="portalWrapper">
+        <div class="portal-frame" id="portalFrame">
+          <img 
+            src="materials/Whimsical Knitted Hillside Village.png" 
+            alt="Whimsical Knitted Hillside Village in Floria" 
+            class="portal-image" 
+            id="portalImage"
+          >
+          <div class="portal-edge-glow" id="portalEdgeGlow"></div>
+          <!-- Landscape Hotspots -->
+          <div class="landscape-hotspot" id="hotspot1" style="top:38%;left:28%" data-label="The Weaver's Cottage" data-desc="Hand-stitched into living hillside earth.">
+            <div class="hotspot-ping"></div>
+            <div class="hotspot-tooltip"><strong>The Weaver's Cottage</strong><p>Hand-stitched into living hillside earth.</p></div>
+          </div>
+          <div class="landscape-hotspot" id="hotspot2" style="top:62%;left:58%" data-label="Mirror Lake" data-desc="Reflects the eternal twilight sky of Realm 01.">
+            <div class="hotspot-ping"></div>
+            <div class="hotspot-tooltip"><strong>Mirror Lake</strong><p>Reflects the eternal twilight sky of Realm 01.</p></div>
+          </div>
+          <div class="landscape-hotspot" id="hotspot3" style="top:25%;left:68%" data-label="Chimney Spire" data-desc="Exhales warm cinnamon plumes each dusk.">
+            <div class="hotspot-ping"></div>
+            <div class="hotspot-tooltip"><strong>Chimney Spire</strong><p>Exhales warm cinnamon plumes each dusk.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Minimal Floating Scroll Indicator -->
+      <div class="exhibition-scroll-hint" id="scrollHint">
+        <span class="hint-text">EXPANDING REALM</span>
+        <div class="hint-bar"><div class="hint-bar-fill" id="hintBarFill"></div></div>
+      </div>
+
+      <!-- Final Immersive Title Overlay (Appears gracefully at full expansion) -->
+      <div class="exhibition-final-caption" id="finalCaption">
+        <span class="final-realm-tag">SANCTUARY 02 &bull; LIVING ARCHIVE</span>
+        <h2 class="final-realm-title">Valley of the Spun Hills</h2>
+        <p class="final-realm-sub">An uncharted haven woven entirely in light, yarn, and twilight memories.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FLORIA DISCOVERY SECTION (Curated Scientific Field Journal & Exhibition)
+       ======================================================================== -->
+  <section class="discovery-archive-section" id="discoverySection" aria-label="Floria Discovery Archive">
+    
+    <!-- Ambient Background Lighting & Oversized Ghost Typography -->
+    <div class="discovery-bg-ambient" aria-hidden="true">
+      <div class="discovery-glow-spot glow-spot-1"></div>
+      <div class="discovery-glow-spot glow-spot-2"></div>
+      <div class="discovery-glow-spot glow-spot-3"></div>
+      <div class="oversized-ghost-word ghost-word-1">SPECIMENS</div>
+      <div class="oversized-ghost-word ghost-word-2">ARCHIVE</div>
+      <div class="oversized-ghost-word ghost-word-3">CHRONICLE</div>
+      <!-- Subtle Flowing Background Ether & Spores Canvas -->
+      <canvas class="discovery-flow-canvas" id="discoveryFlowCanvas" aria-hidden="true"></canvas>
+    </div>
+
+    <!-- Editorial Floating Journal Grid Guides (Subtle field-notes lines) -->
+    <div class="journal-field-guides" aria-hidden="true">
+      <span class="field-guide-line line-left"></span>
+      <span class="field-guide-line line-right"></span>
+    </div>
+
+    <div class="discovery-inner-container">
+      
+      <!-- Section Header: Scientific Journal Meets Futuristic Art Exhibition -->
+      <header class="discovery-header">
+        <div class="discovery-header-topline">
+          <div class="journal-meta-badge">
+            <span class="meta-pulse-dot"></span>
+            <span class="meta-badge-text">CODEX 03 &bull; FIELD EXPEDITION ARCHIVE</span>
+          </div>
+          <div class="journal-coord-tag">
+            <span class="tag-bracket">[</span>
+            <span>SECTOR: 04-G // LAT 74.0060&deg; W</span>
+            <span class="tag-bracket">]</span>
+          </div>
+        </div>
+
+        <div class="discovery-headline-row">
+          <div class="discovery-title-block">
+            <span class="discovery-eyebrow">UNEXPLORED REALMS &amp; ENTITIES</span>
+            <h2 class="discovery-title" id="discoveryHeadline">DISCOVER FLORIA</h2>
+          </div>
+
+          <div class="discovery-lead-box">
+            <p class="discovery-intro">
+              Beyond the charted perimeter lies a living tapestry of sentient botanicals, celestial wanderers, and tactile dwellings hand-stitched into the earth. Each entity resonates with forgotten harmonics—preserved in this open field journal for curious explorers.
+            </p>
+            <div class="discovery-index-pills">
+              <span class="index-pill"><strong class="pill-num">05</strong> LIVING ARCHIVES</span>
+              <span class="index-pill"><strong class="pill-num">528 Hz</strong> RESONANCE</span>
+              <span class="index-pill pill-status"><span class="status-indicator"></span>FIELD SURVEY OPEN</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Card Filter Tabs -->
+      <div class="card-filter-tabs" id="cardFilterTabs" role="tablist" aria-label="Filter creatures and sanctuaries">
+        <button class="filter-tab is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="filter-tab" data-filter="entity" role="tab" aria-selected="false">Entities</button>
+        <button class="filter-tab" data-filter="botanical" role="tab" aria-selected="false">Botanicals</button>
+        <button class="filter-tab" data-filter="domain" role="tab" aria-selected="false">Sanctuaries</button>
+        <button class="filter-tab" data-filter="guide" role="tab" aria-selected="false">Guides</button>
+      </div>
+
+      <!-- Asymmetric Editorial Grid (Curated 5-Card Layout with Distinct Aspect Ratios & Positions) -->
+      <div class="discovery-asymmetric-grid" id="discoveryGrid">
+        
+        <!-- Card 1: Aether Weaver (Tall 3:4 Vertical, Left-Dominant Stagger) -->
+        <article class="discovery-card card-tall card-slot-1" data-card-index="1" data-category="entity">
+          <div class="card-inner">
+            <div class="card-media-wrapper">
+              <img 
+                src="materials/creature-weaver.jpg" 
+                alt="Aether Weaver moth entity in Floria" 
+                class="card-img" 
+                loading="lazy"
+              >
+              <div class="card-media-gradient"></div>
+              <div class="card-corner-spec rarity-legendary">SPEC // 01-W</div>
+              <div class="card-hover-flare" aria-hidden="true"></div>
+            </div>
+            <div class="card-info">
+              <div class="card-meta-row">
+                <span class="card-category-tag">ENTITY 01 &bull; NOCTURNAL WEAVER</span>
+                <span class="card-status-pulse"><span class="pulse-ring"></span>ACTIVE</span>
+              </div>
+              <h3 class="card-name">Aether Weaver</h3>
+              <p class="card-desc">
+                Spins luminous filaments from dormant twilight pollen to stitch boundary sanctuaries across the deep velvet moss canopy.
+              </p>
+              <div class="card-micro-specs">
+                <span class="micro-spec">HARMONIC: <strong>528 Hz</strong></span>
+                <span class="micro-spec">HABITAT: <strong>DEEP SHADOWS</strong></span>
+              </div>
+            </div>
+              <button class="card-dossier-btn" data-creature="aether-weaver" aria-label="View full dossier for Aether Weaver">VIEW FULL DOSSIER &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Card 2: Nocturne Obsidian Bloom (Sculptural 4:3 Wide, Center-Right Offset) -->
+        <article class="discovery-card card-wide card-slot-2" data-card-index="2" data-category="botanical">
+          <div class="card-inner">
+            <div class="card-media-wrapper">
+              <img 
+                src="materials/obsidian-bloom.jpg" 
+                alt="Nocturne Obsidian Bloom botanical specimen" 
+                class="card-img" 
+                loading="lazy"
+              >
+              <div class="card-media-gradient"></div>
+              <div class="card-corner-spec rarity-rare">SPEC // 02-B</div>
+              <div class="card-hover-flare" aria-hidden="true"></div>
+            </div>
+            <div class="card-info">
+              <div class="card-meta-row">
+                <span class="card-category-tag">SPECIMEN 02 &bull; BOTANICAL RELIC</span>
+                <span class="card-rarity-pill">VULCANIC // RARE</span>
+              </div>
+              <h3 class="card-name">Nocturne Obsidian Bloom</h3>
+              <p class="card-desc">
+                Carved of volcanic glass petals, uncoiling once every century at the winter solstice to exhale warm copper embers into the frost.
+              </p>
+              <div class="card-micro-specs">
+                <span class="micro-spec">CORE TEMP: <strong>+64&deg;C</strong></span>
+                <span class="micro-spec">SUBSTRATE: <strong>BASALT CRUST</strong></span>
+              </div>
+            </div>
+              <button class="card-dossier-btn" data-creature="obsidian-bloom" aria-label="View full dossier for Nocturne Obsidian Bloom">VIEW FULL DOSSIER &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Card 3: Valley of the Spun Hills (Panoramic Horizontal Domain Anchor) -->
+        <article class="discovery-card card-domain card-slot-3" data-card-index="3" data-category="domain">
+          <div class="card-inner">
+            <div class="card-media-wrapper">
+              <img 
+                src="materials/Whimsical Knitted Hillside Village.png" 
+                alt="Valley of the Spun Hills sanctuary in Floria" 
+                class="card-img" 
+                loading="lazy"
+              >
+              <div class="card-media-gradient"></div>
+              <div class="card-domain-badge">LIVING SANCTUARY // DOMAIN 01</div>
+              <div class="card-hover-flare" aria-hidden="true"></div>
+            </div>
+            <div class="card-info">
+              <div class="card-meta-row">
+                <span class="card-category-tag">DOMAIN 03 &bull; LIVING ARCHITECTURE</span>
+                <span class="card-coords-tag">LAT 74.00&deg;W &bull; 40.71&deg;N</span>
+              </div>
+              <h3 class="card-name">Valley of the Spun Hills</h3>
+              <p class="card-desc">
+                A gentle mountain haven where cobblestones, fences, and thatched roofs are hand-stitched into the hillside, sheltering 42 elder weavers under perpetual twilight.
+              </p>
+              <div class="card-micro-specs">
+                <span class="micro-spec">ELEVATION: <strong>1,420M</strong></span>
+                <span class="micro-spec">COMMUNITY: <strong>42 WEAVERS</strong></span>
+                <span class="micro-spec">ATMOSPHERE: <strong>SPICED AUTUMN</strong></span>
+              </div>
+            </div>
+              <button class="card-dossier-btn" data-creature="spun-hills" aria-label="View full dossier for Valley of the Spun Hills">EXPLORE DOMAIN &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Card 4: Celestia Moon-Horned Cervid (Tall 3:4 Vertical, Right Column Float) -->
+        <article class="discovery-card card-tall card-slot-4" data-card-index="4" data-category="entity">
+          <div class="card-inner">
+            <div class="card-media-wrapper">
+              <img 
+                src="materials/moon-stag.jpg" 
+                alt="Celestia Moon-Horned Cervid in twilight mist" 
+                class="card-img" 
+                loading="lazy"
+              >
+              <div class="card-media-gradient"></div>
+              <div class="card-corner-spec rarity-celestial">SPEC // 04-C</div>
+              <div class="card-hover-flare" aria-hidden="true"></div>
+            </div>
+            <div class="card-info">
+              <div class="card-meta-row">
+                <span class="card-category-tag">ENTITY 04 &bull; TWILIGHT GUARDIAN</span>
+                <span class="card-status-pulse"><span class="pulse-ring"></span>CELESTIAL</span>
+              </div>
+              <h3 class="card-name">Moon-Horned Cervid</h3>
+              <p class="card-desc">
+                An ethereal wanderer whose crystalline antler crown gathers cosmic starlight, quietly guiding lost explorers across the misted glacial hollows.
+              </p>
+              <div class="card-micro-specs">
+                <span class="micro-spec">BEHAVIOR: <strong>SOLITARY</strong></span>
+                <span class="micro-spec">AURA: <strong>ASTRAL LUMEN</strong></span>
+              </div>
+            </div>
+              <button class="card-dossier-btn" data-creature="moon-cervid" aria-label="View full dossier for Moon-Horned Cervid">VIEW FULL DOSSIER &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Card 5: The Elder Cartographer (Compact Tactile Square, Asymmetric Anchor) -->
+        <article class="discovery-card card-compact card-slot-5" data-card-index="5" data-category="guide">
+          <div class="card-inner">
+            <div class="card-media-wrapper">
+              <img 
+                src="materials/front pic.jpg" 
+                alt="The Elder Cartographer in knitted teal cap" 
+                class="card-img" 
+                loading="lazy"
+              >
+              <div class="card-media-gradient"></div>
+              <div class="card-corner-spec rarity-keeper">GUIDE // 05-G</div>
+              <div class="card-hover-flare" aria-hidden="true"></div>
+            </div>
+            <div class="card-info">
+              <div class="card-meta-row">
+                <span class="card-category-tag">FIGURE 05 &bull; EXPEDITION GUIDE</span>
+                <span class="card-rarity-pill">KEEPER</span>
+              </div>
+              <h3 class="card-name">The Elder Cartographer</h3>
+              <p class="card-desc">
+                Master of the codex, charting secret hollows with aromatic cinnamon pipe-smoke, curious tales, and hand-bound parchment scrolls.
+              </p>
+              <div class="card-micro-specs">
+                <span class="micro-spec">STATUS: <strong>RECORDING</strong></span>
+                <span class="micro-spec">EXPEDITION: <strong>VOL. IX</strong></span>
+              </div>
+            </div>
+              <button class="card-dossier-btn" data-creature="elder-cartographer" aria-label="View full dossier for The Elder Cartographer">VIEW FULL DOSSIER &rarr;</button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Strong Centered Discovery Call to Action -->
+      <div class="discovery-cta-section">
+        <div class="cta-ornament" aria-hidden="true">
+          <span class="ornament-line"></span>
+          <span class="ornament-diamond">&diams;</span>
+          <span class="ornament-line"></span>
+        </div>
+        <span class="cta-kicker-label">THE CODEX AWAITS YOUR ENTRY</span>
+        <h3 class="cta-invitation-text">Ready to step beyond the known borders?</h3>
+        
+        <button class="discovery-main-cta-btn" id="enterWorldBtn" aria-label="Enter the World of Floria">
+          <span class="cta-btn-text">ENTER THE WORLD</span>
+          <span class="cta-btn-arrow">&rarr;</span>
+          <div class="btn-glow-aura" aria-hidden="true"></div>
+          <div class="btn-ripple-ring" aria-hidden="true"></div>
+        </button>
+        
+        <div class="cta-footnote">
+          <span class="meta-dot"></span>
+          <span>AN EXPERIENTIAL ODYSSEY BY FLORIA &bull; CURATED SANCTUARIES ACTIVE</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FLORIA EDITORIAL ART-BOOK FOOTER (Monumental Typography & Pure Black)
+       ======================================================================== -->
+  <footer class="floria-editorial-footer" id="floriaFooter" role="contentinfo">
+    <div class="footer-inner-container">
+      
+      <!-- Top Editorial Metadata & Colophon Bar -->
+      <div class="footer-top-meta-row">
+        <div class="footer-meta-badge">
+          <span class="footer-beacon-dot"></span>
+          <span class="footer-meta-text">FLORIA COMPENDIUM // VOL. 01 &bull; EDITION 2026</span>
+        </div>
+        <div class="footer-coordinates">
+          <span>LAT 74.0060&deg; W &bull; 40.7128&deg; N // PERIMETER SECURE</span>
+        </div>
+      </div>
+
+      <!-- Main Editorial Grid: The Manifesto, Sanctuaries, Codex & Dispatches -->
+      <div class="footer-content-grid">
+        
+        <!-- Col 1: Brand Manifesto & Colophon -->
+        <div class="footer-col footer-col-manifesto">
+          <span class="footer-col-header">THE MANIFESTO</span>
+          <p class="footer-manifesto-text">
+            FLORIA is an uncharted sanctuary of living imagination, tactile wonders, and mythical creatures waiting to be unraveled. Designed as a poetic refuge from the ordinary, where craftsmanship meets ancient mystery.
+          </p>
+          <div class="footer-colophon-note">
+            <span>SET IN PLUS JAKARTA SANS, SYNE &amp; SPACE GROTESK</span>
+            <span>HAND-CRAFTED DIGITAL ARCHIVE &bull; NO PLACEHOLDERS</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Sanctuaries Navigation -->
+        <div class="footer-col footer-col-nav">
+          <span class="footer-col-header">SANCTUARIES</span>
+          <ul class="footer-nav-list">
+            <li><a href="#heroScreen" class="footer-nav-link"><span class="nav-num">01</span> Valley of Spun Hills</a></li>
+            <li><a href="#discoverySection" class="footer-nav-link"><span class="nav-num">02</span> The Obsidian Grotto</a></li>
+            <li><a href="#discoverySection" class="footer-nav-link"><span class="nav-num">03</span> Aether Moss Canopy</a></li>
+            <li><a href="#discoverySection" class="footer-nav-link"><span class="nav-num">04</span> Glacial Mist Hollows</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Codex Links -->
+        <div class="footer-col footer-col-codex">
+          <span class="footer-col-header">THE CODEX</span>
+          <ul class="footer-nav-list">
+            <li><button class="footer-nav-action-btn" id="footerCreaturesTrigger"><span class="nav-num">&bull;</span> Creature Index</button></li>
+            <li><button class="footer-nav-action-btn" id="footerExploreTrigger"><span class="nav-num">&bull;</span> Expedition Logs</button></li>
+            <li><a href="#exhibitionSection" class="footer-nav-link"><span class="nav-num">&bull;</span> Sanctuary Exhibition</a></li>
+            <li><a href="#discoverySection" class="footer-nav-link"><span class="nav-num">&bull;</span> Specimen Field Notes</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Dispatches & Social Links -->
+        <div class="footer-col footer-col-dispatches">
+          <span class="footer-col-header">DISPATCHES</span>
+          <div class="footer-social-links-group">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-pill">
+              <span>Instagram</span>
+              <span class="pill-arrow">&nearr;</span>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer-social-pill">
+              <span>X / Twitter</span>
+              <span class="pill-arrow">&nearr;</span>
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="footer-social-pill">
+              <span>Discord</span>
+              <span class="pill-arrow">&nearr;</span>
+            </a>
+            <a href="https://arena.com" target="_blank" rel="noopener noreferrer" class="footer-social-pill">
+              <span>Are.na</span>
+              <span class="pill-arrow">&nearr;</span>
+            </a>
+          </div>
+
+          <div class="footer-dispatch-card">
+            <span class="dispatch-tag">FIELD DISPATCHES</span>
+            <p class="dispatch-desc">Receive secret cartography updates at the equinox.</p>
+            <div class="footer-newsletter">
+              <input type="email" class="newsletter-input" id="newsletterInput" placeholder="your@realm.codex" aria-label="Email for dispatches">
+              <button class="newsletter-btn" id="newsletterBtn" aria-label="Subscribe to dispatches">&rarr;</button>
+            </div>
+            <span class="newsletter-confirm" id="newsletterConfirm">Dispatch confirmed. Welcome, explorer.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Monumental Oversized FLORIA Typography (Final Page of an Art Book) -->
+      <div class="footer-monumental-wrap" aria-hidden="true">
+        <div class="footer-monumental-text" id="footerMonumentalText">
+          FLORIA
+        </div>
+      </div>
+
+      <!-- Bottom Colophon & Copyright Bar -->
+      <div class="footer-bottom-bar">
+        <div class="footer-copyright">
+          &copy; 2026 FLORIA RESEARCH ARCHIVE. ALL RIGHTS RESERVED.
+        </div>
+        <div class="footer-bottom-actions">
+          <span class="footer-status-pill">CODEX STATUS: ONLINE</span>
+          <span class="sep-bullet">&bull;</span>
+          <a href="#heroScreen" class="back-to-summit-btn" id="backToSummitBtn" aria-label="Return to summit">
+            <span>RETURN TO SUMMIT</span>
+            <span class="summit-arrow">&uarr;</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Interactive Drawer: Meet the Creatures Modal (Editorial & Minimalist) -->
+  <div class="modal-overlay" id="creaturesModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">FLORIA CODEX &bull; SPECIMENS</span>
+          <h2 class="modal-title">Creatures of the Gloom &amp; Glow</h2>
+        </div>
+        <button class="modal-close-btn" id="closeCreaturesModal" aria-label="Close modal">&times;</button>
+      </div>
+      
+      <div class="creature-dossier-grid">
+        <article class="creature-card">
+          <div class="creature-tag">NOCTURNAL ENTITY &bull; 001</div>
+          <h3 class="creature-name">Aetherion Veil</h3>
+          <p class="creature-desc">Translucent beings that glide through silent abysses, emitting bioluminescent frequency pulses that calibrate Floria’s magnetic currents.</p>
+          <div class="creature-stat-row">
+            <span>Harmonic: 432 Hz</span>
+            <span>Origin: Deep Obsidian Trench</span>
+          </div>
+        </article>
+
+        <article class="creature-card">
+          <div class="creature-tag">CELESTIAL BEAST &bull; 002</div>
+          <h3 class="creature-name">Solarix Drake</h3>
+          <p class="creature-desc">Formed of cold starlight and black mineral scales. They breathe quiet aurora ribbons across dormant crystal peaks at twilight.</p>
+          <div class="creature-stat-row">
+            <span>Thermal: Sub-Zero Flame</span>
+            <span>Origin: Celestial Spire</span>
+          </div>
+        </article>
+
+        <article class="creature-card">
+          <div class="creature-tag">FOREST GHOST &bull; 003</div>
+          <h3 class="creature-name">Mirage Lynx</h3>
+          <p class="creature-desc">Silent wanderers capable of bending illumination. Observers only glimpse their silver-threaded contours within dense mist.</p>
+          <div class="creature-stat-row">
+            <span>Phase: Quantum Shift</span>
+            <span>Origin: The Shimmer Wood</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="modal-footer">
+        <button class="cta-btn primary-btn" id="modalExploreBtn">
+          <span>Enter Sanctuary Vault</span>
+          <span class="btn-arrow">&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Exploration Portal Drawer (Explore Floria) -->
+  <div class="modal-overlay" id="exploreModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card realm-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">PORTAL ACCESS &bull; GATE 09</span>
+          <h2 class="modal-title">Discover the Uncharted Territories</h2>
+        </div>
+        <button class="modal-close-btn" id="closeExploreModal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="realm-content">
+        <div class="realm-intro">
+          <p>You stand at the threshold of Floria. Every corridor is steeped in quiet mystery, ancient resonance, and mythical beings woven into shadow and light.</p>
+        </div>
+
+        <div class="territory-list">
+          <div class="territory-item">
+            <span class="territory-num">I</span>
+            <div>
+              <h4>The Black Sun Hollow</h4>
+              <p>An endless obsidian cavern illuminated solely by floating spores of dormant organisms.</p>
+            </div>
+            <span class="territory-status">UNLOCKED</span>
+          </div>
+          <div class="territory-item">
+            <span class="territory-num">II</span>
+            <div>
+              <h4>Whispering Spire</h4>
+              <p>Towering crystalline structures transmitting ancient melodic echoes across time.</p>
+            </div>
+            <span class="territory-status">ACTIVE</span>
+          </div>
+          <div class="territory-item">
+            <span class="territory-num">III</span>
+            <div>
+              <h4>The Silver Tide</h4>
+              <p>A zero-gravity mirror sea where ethereal tides ebb with the thoughts of ancient guardians.</p>
+            </div>
+            <span class="territory-status">SACRED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="cta-btn secondary-btn" id="backToHeroBtn">
+          <span>Close Gate</span>
+        </button>
+        <button class="cta-btn primary-btn" id="beginJourneyBtn">
+          <span>Begin Journey &rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sound/Atmosphere Toggle (Pulse Pill) -->
+  <button class="audio-toggle-btn" id="audioToggle" aria-label="Toggle ambient atmospheric tone" title="Toggle mysterious atmospheric drone">
+    <div class="audio-pulse-ring" aria-hidden="true"></div>
+    <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" class="sound-wave"></path>
+    </svg>
+    <span class="audio-state-text">SOUND: OFF</span>
+  </button>
+
+  <!-- Dossier Modal (Full-screen creature detail) -->
+  <div class="dossier-overlay" id="dossierOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="dossier-panel" id="dossierPanel">
+      <button class="dossier-close" id="dossierClose" aria-label="Close dossier">&times;</button>
+      <div class="dossier-content" id="dossierContent"></div>
+    </div>
+  </div>
+
+  <!-- Three.js & GLTF Loader for 3D Hero Model -->
+  <script src="libs/three.min.js"></script>
+  <script src="libs/GLTFLoader.js"></script>
+  <script src="script.js?v=34"></script>
+</body>
+</html>
